@@ -15,6 +15,8 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
 
 	Optional<ProductEntity> findByExternalId(String externalId);
 
+	Optional<ProductEntity> findByName(String name);
+
 	@Transactional
 	@Modifying
 	@Query("update ProductEntity set price = :price where id = :id")
