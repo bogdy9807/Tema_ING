@@ -44,7 +44,7 @@ public interface ProductApi {
 			@ApiResponse(responseCode = "400", description = "Bad request data"),
 			@ApiResponse(responseCode = "500", description = "An exception occurred during addition of the product")
 	})
-	ResponseEntity<String> addProduct(@RequestBody ProductDto productDto);
+	ResponseEntity<String> addProduct(@Valid @RequestBody ProductDto productDto);
 
 	@PatchMapping(value = "/price", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@Operation(description = "Updates the price of a product")

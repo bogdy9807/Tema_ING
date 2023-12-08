@@ -1,6 +1,7 @@
 package com.example.ing.service;
 
 import com.example.ing.api.dto.ProductDto;
+import com.example.ing.api.dto.ProductPriceDto;
 import com.example.ing.entity.ProductEntity;
 import com.example.ing.mapper.ProductMapper;
 import com.example.ing.repository.ProductRepository;
@@ -16,7 +17,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -26,6 +26,7 @@ class ProductServiceTest {
 	private static final String EXTERNAL_ID = "externalId";
 	private static final String NAME = "Name";
 	private static final Float PRICE = 10F;
+	private static final Long PRODUCT_ID = 1L;
 
 	@InjectMocks
 	private ProductService productService;
@@ -70,7 +71,7 @@ class ProductServiceTest {
 	}
 
 	@Test
-	void whenAddProductAndNameIsAlreadyUsed_expectProcessAlreadyPresentException() {
+	void whenAddProductAndNameIsAlreadyUsed_expectProductAlreadyPresentException() {
 		ProductEntity productEntity = getProductEntity();
 		ProductDto productDto = ProductMapper.mapToProductDto(productEntity);
 		when(productRepository.findByName(NAME)).thenReturn(Optional.of(productEntity));
@@ -79,7 +80,7 @@ class ProductServiceTest {
 	}
 
 	@Test
-	void whenAddProductAndExternalIdIsAlreadyUsed_expectProcessAlreadyPresentException() {
+	void whenAddProductAndExternalIdIsAlreadyUsed_expectProductAlreadyPresentException() {
 		ProductEntity productEntity = getProductEntity();
 		ProductDto productDto = ProductMapper.mapToProductDto(productEntity);
 		when(productRepository.findByExternalId(EXTERNAL_ID)).thenReturn(Optional.of(productEntity));
@@ -99,13 +100,39 @@ class ProductServiceTest {
 		assertNotNull(extId);
 	}
 
+	@Test
+	void whenUpdateProdPricing_expectPriceUpdated() {
+		Float price = 11F;
+		ProductPriceDto productPriceDto = ProductPriceDto.builder()
+				.price(price)
+				.externalId(EXTERNAL_ID)
+				.build();
+		ProductEntity productEntity = getProductEntity();
+		productEntity.setId(PRODUCT_ID);
+		when(productRepository.findByExternalId(EXTERNAL_ID)).thenReturn(Optional.of(productEntity));
+
+		productService.updateProductPrice(productPriceDto);
+
+		verify(productRepository).updateProductPriceById(PRODUCT_ID, price);
+	}
+
+	@Test
+	void whenUpdateProdPricingAndProductIsNotFound_expectProductNotFoundException() {
+		ProductPriceDto productPriceDto = ProductPriceDto.builder()
+				.price(PRICE)
+				.externalId(EXTERNAL_ID)
+				.build();
+
+		assertThrows(ProductNotFoundException.class, () -> productService.updateProductPrice(productPriceDto));
+	}
+
 	private void assertProductFields(ProductDto foundProduct) {
 		assertEquals(NAME, foundProduct.getName());
 		assertEquals(EXTERNAL_ID, foundProduct.getExternalId());
 		assertEquals(PRICE, foundProduct.getPrice());
 	}
 
-	private static ProductEntity getProductEntity() {
+	private ProductEntity getProductEntity() {
 		ProductEntity productEntity = new ProductEntity();
 		productEntity.setExternalId(EXTERNAL_ID);
 		productEntity.setName(NAME);

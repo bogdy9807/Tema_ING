@@ -31,7 +31,7 @@ public class ProductController implements ProductApi {
 	}
 
 	@Override
-	public ResponseEntity<String> addProduct(ProductDto productDto) {
+	public ResponseEntity<String> addProduct(@Valid ProductDto productDto) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(productService.addProduct(productDto));
 	}
 

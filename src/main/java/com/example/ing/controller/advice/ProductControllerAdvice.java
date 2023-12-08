@@ -1,5 +1,6 @@
 package com.example.ing.controller.advice;
 
+import com.example.ing.controller.ProductController;
 import com.example.ing.service.exception.ProductAlreadyPresentException;
 import com.example.ing.service.exception.ProductNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @Slf4j
-@RestControllerAdvice
+@RestControllerAdvice(assignableTypes = ProductController.class)
 public class ProductControllerAdvice extends ResponseEntityExceptionHandler {
 
 	private static final String EXCEPTION_OCCURRED = "Exception occurred: ";
