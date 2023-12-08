@@ -4,6 +4,7 @@ import com.example.ing.api.ProductApi;
 import com.example.ing.api.dto.ProductDto;
 import com.example.ing.api.dto.ProductPriceDto;
 import com.example.ing.service.ProductService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -35,7 +36,7 @@ public class ProductController implements ProductApi {
 	}
 
 	@Override
-	public ResponseEntity<Void> updateProductPrice(ProductPriceDto productPriceDto) {
+	public ResponseEntity<Void> updateProductPrice(@Valid ProductPriceDto productPriceDto) {
 		productService.updateProductPrice(productPriceDto);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}

@@ -19,6 +19,6 @@ public class ProductControllerAdvice extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(value = {ProductAlreadyPresentException.class})
 	protected ResponseEntity<Object> handleInternalException(ProductAlreadyPresentException ex) {
-		return new ResponseEntity<>(ex.getMessage(), new HttpHeaders(), HttpStatus.NOT_ACCEPTABLE);
+		return new ResponseEntity<>(ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
 	}
 }
