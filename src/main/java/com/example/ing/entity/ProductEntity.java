@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.time.ZonedDateTime;
 
 @Entity
+@Table(name = "PRODUCT")
 @Data
 public class ProductEntity implements Serializable {
 

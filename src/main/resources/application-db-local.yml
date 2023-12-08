@@ -2,9 +2,15 @@ spring:
   flyway:
     locations: 'classpath:db/migrations'
     table: schema_version
+    baseline-on-migrate: true
+    url: jdbc:h2:file:./h2/productData
+    user: test
+    password: password
+    default-schema: PUBLIC
+    clean-disabled: false
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:file:./h2/productData;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=Oracle;DEFAULT_NULL_ORDERING=HIGH
+    url: jdbc:h2:file:./h2/productData;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=Oracle;NON_KEYWORDS=USER;
     username: test
     password: password
     hikari:
