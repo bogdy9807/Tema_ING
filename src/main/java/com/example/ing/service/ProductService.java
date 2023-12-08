@@ -40,6 +40,9 @@ public class ProductService {
 	public String addProduct(ProductDto productDto) {
 		log.info("addProduct({})", productDto);
 
+		if (Strings.isBlank(productDto.getExternalId())) {
+			productDto.setExternalId(UUID.randomUUID().toString());
+		}
 		ProductEntity productEntity = ProductMapper.mapToProductEntity(productDto);
 		validateProductInformation(productEntity);
 
@@ -67,8 +70,5 @@ public class ProductService {
 		productRepository.findByName(productEntity.getName()).ifPresent(prod -> throwProductAlreadyPresentException(NAME, prod.getName()));
 		productRepository.findByExternalId(productEntity.getExternalId())
 				.ifPresent(prod -> throwProductAlreadyPresentException(EXTERNAL_ID, prod.getExternalId()));
-		if (Strings.isBlank(productEntity.getExternalId())) {
-			productEntity.setExternalId(UUID.randomUUID().toString());
-		}
 	}
 }
